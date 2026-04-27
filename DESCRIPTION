@@ -1,0 +1,42 @@
+Package: Protein2Tissue
+Title: An R package for tissue expression analysis and gene set enrichment
+Version: 0.99.0
+Authors@R: c(
+    person(given   = "Chaoran",
+           family  = "Yang",
+           email   = "chaoran.yang@monash.edu",
+           role    = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-6639-8136")),
+    person(given   = "Yao",
+           family  = "Chen",
+           email   = "emmachentar@live.com",
+           role    = "aut",
+           comment = c(ORCID = "0000-0001-8172-3996")))
+Description: A package for analysing tissue-specific gene expression
+    patterns. An example gene expression data is derived from the Human Protein Atlas
+    (https://www.proteinatlas.org).
+biocViews: Tissue, MutipleComparison, GeneExpression, Visualization, Network, GO
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: false
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Depends: 
+    R (>= 4.3.0)
+Imports:
+    dplyr,
+    igraph,
+    ggraph,
+    ggplot2,
+    clusterProfiler,
+    AnnotationDbi,
+    org.Hs.eg.db
+Suggests: 
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    BiocStyle,
+    org.Hs.eg.db
+VignetteBuilder: knitr
+URL: https://github.com/chryang/Protein2Tissue
+BugReports: https://github.com/chryang/Protein2Tissue/issues

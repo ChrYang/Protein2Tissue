@@ -1,0 +1,446 @@
+---
+title: "An introduction to Protein2Tissue"
+author:
+  - name: "Chaoran Yang"
+    affiliation: "Victorian Heart Institute, Monash University"
+  - name: "Yao Chen"
+    affiliation: "Faculty of Science, Ghent University"
+date: "`r Sys.Date()`"
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Introduction to Protein2Tissue}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    collapse  = TRUE,
+    comment   = "#>",
+    fig.width = 7,
+    fig.height = 5
+)
+```
+
+# Introduction
+
+`Protein2Tissue` is a Bioconductor package for tissue enrichment analysis of
+protein and gene lists. Given a set of proteins or genes of interest and a
+background set, the package identifies which tissues are significantly
+over-represented using statistical tests. Results can be explored through
+a suite of visualisation functions including heatmaps, bar charts, network
+plots, and GO enrichment analysis.
+
+Gene expression reference data are derived from the
+[Human Protein Atlas](https://www.proteinatlas.org) (HPA), which classifies
+genes into three tissue-specific expression categories:
+
+- **Tissue enriched** — expression is significantly higher in one tissue
+  compared to all others
+- **Group enriched** — elevated expression in a small group of tissues
+- **Tissue enhanced** — expression is higher in one tissue relative to the
+  average across all tissues
+- **Not detect** - no expression detected in any tissue
+
+
+## Installation
+
+```{r install, eval = FALSE}
+if (!requireNamespace("remotes", quietly = TRUE)) {
+    install.packages("remotes")
+}
+remotes::install_github("ChrYang/Protein2Tissue")
+```
+
+Once accepted to Bioconductor, the package will also be installable via:
+
+```{r install_bioc, eval = FALSE}
+# not yet available - coming soon
+BiocManager::install("Protein2Tissue")
+```
+
+## Loading the package
+
+```{r load, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(Protein2Tissue)
+```
+
+# Input data
+
+## Reference database
+
+The package ships with `ee_tb`, an example gene/protein tissue expression 
+data frame derived from the Human Protein Atlas. It contains tissue-specific 
+expression classifications for human genes. It can be inspected directly:
+
+```{r database, eval = FALSE}
+data("ee_tb", package = "Protein2Tissue")
+head(ee_tb)
+```
+
+Key columns in `ee_tb`:
+
+| Column | Description |
+|---|---|
+| `Gene` | HGNC gene symbol |
+| `Ensembl` | Ensembl gene identifier |
+| `tissue` | tissue name |
+| `signal` | expression category |
+| `Tissue.specificity` | RNA specificity class |
+| `Is_secreted` | whether the protein is secreted |
+
+# Scenario 1: Assessing Tissue-Specific Protein Expression
+
+We are going to demonstrate how to test tissue enrichment of proteins using 
+the example dataset within the `Protein2Tissue` package.
+
+
+`Protein2Tissue` requires two inputs:
+
+- **Input**: a list of proteins or genes of interest (for example, 
+differentially expressed proteins from a plasma proteomics experiment).
+- **Background**: the full set of proteins or genes having been 
+detected in the experiment. If this is not provided, all genes or proteins 
+in the provided database are used as the background.
+```{r inputs}
+# example input: gene symbols
+data("plasma_data", package = "Protein2Tissue")
+myList <- plasma_data %>%
+  filter(Coefficient.Age > 0 & q.Age < 0.05) %>%
+  pull(UniqueSymbol) %>%
+  toupper()
+
+# example background: Gene symbols of all detected proteins
+myBackground <-  toupper(plasma_data$UniqueSymbol)
+  
+```
+
+The identifier types used for the input and background do not have to match. 
+Use `typeKey` and `typeKeyBg` to specify how each list should be matched to the 
+tissue expression database.
+
+## Step 1 — Tissue enrichment analysis
+
+`tissueAnalysis()` maps your input and background lists against the reference 
+database (here we are using the shipped dataset in the package derived from the
+Human Protein Atlas database) and returns an `Enrichment` S4 object:
+
+```{r tissueAnalysis, eval = FALSE}
+result <- tissueAnalysis(
+    input      = myList,
+    background = myBackground,
+    typeKey    = "Gene",      # identifier type for input
+    typeKeyBg  = "Gene",   # identifier type for background
+)
+
+```
+
+The `Enrichment` object has two slots:
+
+```{r slots, eval = FALSE}
+# matched input proteins with HPA annotations
+result@input[1:6,1:6]
+
+# matched background proteins with HPA annotations
+result@background[1:6,1:6]
+```
+
+A custom database can be substituted if needed:
+
+```{r custom_db, eval = FALSE}
+result <- tissueAnalysis(
+    input    = myList,
+    database = myCustomDatabase
+)
+```
+
+Enrichment results can be saved to disk as CSV or TSV files:
+
+```{r custom_db, eval = FALSE}
+writeOutput(result,type = "csv","~/Enrichment_Results.csv")
+```
+
+## Step 2 — RNA tissue specificity overview
+
+Before running statistical tests, it is useful to inspect how your input
+genes are distributed across tissue specificity classes:
+
+```{r plotProteinType, eval = FALSE}
+plotProteinType(result)
+```
+
+This bar chart shows how many of your input genes fall into each specificity 
+class (tissue enriched, group enriched, tissue enhanced,
+low specificity, etc.), giving a quick overview of the tissue-specific
+character of your gene list.
+
+## Step 3 — Expression fingerprint heatmap
+
+`heatmapEnrich()` shows the tissue expression signal for each gene in your
+input as a heatmap:
+
+```{r heatmap, eval = FALSE}
+# all signal categories
+heatmapEnrich(result)
+
+# restrict to strongly tissue-specific signals only
+heatmapEnrich(
+    result,
+    inclusion = c("Tissue enriched", "Tissue enhanced")
+)
+```
+
+Rows are genes and columns are tissues. Colour indicates the signal
+category — orange cells indicate no tissue-specific signal for that
+gene-tissue combination.
+
+## Step 4 — Fisher's exact test
+
+`fisherByTissue()` performs Fisher's exact test for each tissue to identify
+which tissues are significantly enriched in your input list relative to the
+background:
+
+```{r fisher, eval = FALSE}
+fisherResult <- fisherByTissue(
+    result,
+    inclusion     = "All",
+    padj          = "BH",
+    secretoryOnly = FALSE
+)
+
+head(fisherResult)
+```
+
+Each row in the output corresponds to one tissue and contains:
+
+| Column | Description |
+|---|---|
+| `tissue` | tissue name |
+| `input_in` | input proteins expressed in this tissue |
+| `input_total` | total input proteins |
+| `bg_in` | background proteins expressed in this tissue |
+| `bg_total` | total background proteins |
+| `input_prop` | proportion of input proteins in tissue |
+| `bg_prop` | proportion of background proteins in tissue |
+| `OR` | odds ratio |
+| `p_value` | Fisher's exact test p-value |
+| `p_adj` | adjusted p-value |
+
+To restrict the analysis to secretory proteins only:
+
+```{r fisher_secretory, eval = FALSE}
+fisherResultSecretory <- fisherByTissue(
+    result,
+    padj          = "BH",
+    secretoryOnly = TRUE
+)
+```
+
+## Step 5 — Visualise Fisher results
+
+`fisherPlot()` generates a horizontal grouped bar chart comparing input
+and background proportions across tissues, annotated with p-values:
+
+```{r fisherPlot, eval = FALSE}
+fisherPlot(fisherResult)
+```
+
+Blue bars show the proportion of input proteins expressed in each tissue;
+grey bars show the background proportion. P-values from Fisher's exact test
+are annotated to the right of each tissue.
+
+## Step 6 — Network visualisation
+
+`networkPlot()` creates a bipartite network connecting genes to their
+associated tissues, coloured by signal category:
+
+```{r network, eval = FALSE}
+networkPlot(result)
+```
+
+In the network:
+
+- **Large circles** are tissue hubs, labelled with the tissue name
+- **Small points** are genes
+- **Edge colour** encodes the signal category (tissue enriched, group
+  enriched, or tissue enhanced)
+
+This is particularly useful for identifying groups of genes that share
+tissue associations.
+
+## Step 7 — GO enrichment analysis
+
+`goEnriched()` performs Gene Ontology enrichment analysis on genes
+showing tissue-specific expression in a tissue of interest:
+
+```{r go, eval = FALSE}
+# biological process enrichment for liver-associated genes
+goResult <- goEnriched(
+    result,
+    type       = "BP",
+    tissueTest = "Liver",
+    inclusion  = "All"
+)
+
+# view top enriched terms
+head(as.data.frame(goResult@result))
+
+```
+
+The `type` argument accepts:
+
+- `"BP"` — Biological Process (default)
+- `"MF"` — Molecular Function
+- `"CC"` — Cellular Component
+
+# Complete example workflow
+
+```{r full_workflow, eval = FALSE}
+library(Protein2Tissue)
+
+# --- inputs ---
+data("plasma_data", package = "Protein2Tissue")
+
+myList <- plasma_data %>%
+  filter(Coefficient.Age > 0 & q.Age < 0.05) %>%
+  pull(UniqueSymbol) %>%
+  toupper()
+
+# example background: Ensembl IDs representing the detectable proteome
+myBackground <-  toupper(plasma_data$UniqueSymbol)
+
+# --- step 1: tissue enrichment ---
+result <- tissueAnalysis(
+    input      = myList,
+    background = myBackground,
+    typeKey    = "Gene",      # identifier type for input
+    typeKeyBg  = "Gene",   # identifier type for background
+)
+
+writeOutput(result,type = "csv","~/Enrichment_Results.csv")
+
+# --- step 2: overview ---
+plotProteinType(result)
+
+# --- step 3: heatmap ---
+heatmapEnrich(result)
+
+# --- step 4: Fisher's test ---
+fisherResult <- fisherByTissue(result, padj = "BH")
+
+# --- step 5: bar chart ---
+fisherPlot(fisherResult)
+
+# --- step 6: network ---
+networkPlot(result)
+
+# --- step 7: GO enrichment ---
+goResult <- goEnriched(result, type = "BP", tissueTest = "Liver")
+```
+
+#Scenario 2: Tissue-Specific Expression Analysis of Differentially Expressed Genes
+This package can also identify genes or proteins enriched in specified tissues 
+from lists of differentially expressed genes (DEGs) derived from RNA‑seq data or
+differentially expressed proteins (DEPs) obtained from tissue‑specific proteomics
+experiments.
+
+```{r full_workflow, eval = FALSE}
+
+
+result2 <- tissueAnalysis2(
+  input         = c("BRCA1", "EGFR", "ETDB", 
+                    "CCDC7", "TSPY9", "CCDC148"), #List of DEG/DEPs
+  typeKey       = "Gene",
+  database      = NULL,      # NULL uses bundled HPA database
+  inclusion     = "All",
+  secretoryOnly = FALSE,
+  tissueToTest  = "Testis"   # tissue name must match the database
+)
+
+```
+
+The results can be written to disk by the `write.csv()`  function.
+
+```{r full_workflow, eval = FALSE}
+write.csv(result2,"~/result2.csv",row.names=F)
+```
+
+## Scenario 3: Customising Your Own Tissue Expression Database
+
+In addition to using the bundled Human Protein Atlas–derived tissue expression 
+database, this package allows you to construct a custom tissue expression 
+database from a gene‑by‑tissue average expression matrix. This is useful when
+working with user‑generated datasets, alternative expression atlases, or
+organism‑specific expression resources. Help we are using the gene-by-tissue
+average transcripts per million (TPM) matrix from GTEx bundled to this package 
+as an example.
+
+### Classifying tissue specificity from an expression matrix
+
+The `geneClassification()` function classifies genes or proteins based on their 
+tissue‑specific expression patterns. The input expression matrix should be 
+formatted with genes (or proteins) as rows and tissues as columns.
+
+```{r classify_genes_example, eval = FALSE}
+# Example expression matrix (genes x tissues)
+data("tissue_tpm_gtex")
+# Classify tissue specificity using gene symbols
+res <- geneClassification(
+  expression          = tissue_tpm_gtex,
+  typeKey             = "Ensembl",
+  min_expression      = 1,
+  secretory_analysis  = FALSE
+)
+
+head(res)
+
+```
+
+
+### Using predefined tissue groups
+Related tissues can be grouped prior to classification, allowing tissue 
+specificity to be assessed at the designated group rather than the automatically 
+ranked group by expression levels. 
+
+```r
+# Define tissue groups
+data("tissue_map")
+
+# Classify genes using grouped tissues
+res_grouped <- classify_genes(
+  expression          = tissue_tpm_gtex,
+  tissue_groups       = tissue_map,
+  typeKey             = "Gene",
+  min_expression      = 1,
+  secretory_analysis  = FALSE
+)
+```
+
+The resulting classification output can be used directly as a custom tissue 
+expression database in downstream analyses, including tissue enrichment 
+testing with `tissueAnalysis()`.
+
+
+# Data source
+
+The bundled tissue expression database uses tissue-specific gene 
+expression data from the [Human Protein Atlas](https://www.proteinatlas.org). 
+If you use `Protein2Tissue` in your work, please also cite the HPA:
+
+> Uhlen M et al. (2015). Tissue-based map of the human proteome.
+> *Science*, 347(6220). <https://doi.org/10.1126/science.1260419>
+
+> Uhlen M et al. (2017). A pathology atlas of the human cancer
+> transcriptome. *Science*, 357(6352).
+> <https://doi.org/10.1126/science.aan2507>
+
+# Session information
+
+```{r sessionInfo}
+sessionInfo()
+```
