@@ -1,7 +1,7 @@
 # Protein2Tissue
 <!-- badges -->
 ![R](https://img.shields.io/badge/R-%3E%3D4.3.0-276DC3?logo=r)
-![License](https://img.shields.io/badge/license-Artistic--2.0-green)
+![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-in%20development-orange)
 
 
