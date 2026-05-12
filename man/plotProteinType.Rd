@@ -24,12 +24,12 @@ input slot of the \code{Enrichment} object and plots the count of genes
 in each specificity class as a horizontal bar chart.
 }
 \examples{
-\dontrun{
+\donttest{
 result <- tissueAnalysis(
     input      = c("TP53", "BRCA1", "EGFR"),
     background = c("347", "948", "1050", "2167", "2819", "3625"),
     typeKey    = "Gene",
-    typeKeyBg  = "Ensembl"
+    typeKeyBg  = "EntrezID"
 )
 plotProteinType(result)
 }

@@ -13,6 +13,7 @@ the enrichment results of input and background protein lists.
 \describe{
 \item{\code{input}}{An object containing enrichment results for the input set}
 
-\item{\code{background}}{An object containing enrichment results for the background set}
+\item{\code{background}}{An object containing enrichment results for the background
+set}
 }}
 

@@ -65,7 +65,7 @@ BiocManager::install("Protein2Tissue")
 
 ## Loading the package
 
-```{r load, message = FALSE, warning = FALSE}
+```{r load, message = FALSE, eval = FALSE, warning = FALSE}
 library(tidyverse)
 library(Protein2Tissue)
 ```
@@ -107,7 +107,7 @@ differentially expressed proteins from a plasma proteomics experiment).
 - **Background**: the full set of proteins or genes having been 
 detected in the experiment. If this is not provided, all genes or proteins 
 in the provided database are used as the background.
-```{r inputs}
+```{r inputs, eval = FALSE}
 # example input: gene symbols
 data("plasma_data", package = "Protein2Tissue")
 myList <- plasma_data %>%
@@ -161,7 +161,7 @@ result <- tissueAnalysis(
 
 Enrichment results can be saved to disk as CSV or TSV files:
 
-```{r custom_db, eval = FALSE}
+```{r write_output, eval = FALSE}
 writeOutput(result,type = "csv","~/Enrichment_Results.csv")
 ```
 
@@ -343,14 +343,14 @@ networkPlot(result)
 goResult <- goEnriched(result, type = "BP", tissueTest = "Liver")
 ```
 
-#Scenario 2: Tissue-Specific Expression Analysis of Differentially Expressed Genes
+#Scenario 2: Tissue-Specific Expression Analysis of Differentially Expressed 
+#Genes
 This package can also identify genes or proteins enriched in specified tissues 
 from lists of differentially expressed genes (DEGs) derived from RNA‑seq data or
-differentially expressed proteins (DEPs) obtained from tissue‑specific proteomics
-experiments.
+differentially expressed proteins (DEPs) obtained from tissue‑specific 
+proteomics experiments.
 
-```{r full_workflow, eval = FALSE}
-
+```{r full_workflow_tissue_specific, eval = FALSE}
 
 result2 <- tissueAnalysis2(
   input         = c("BRCA1", "EGFR", "ETDB", 
@@ -366,7 +366,7 @@ result2 <- tissueAnalysis2(
 
 The results can be written to disk by the `write.csv()`  function.
 
-```{r full_workflow, eval = FALSE}
+```{r write_results, eval = FALSE}
 write.csv(result2,"~/result2.csv",row.names=F)
 ```
 
@@ -388,7 +388,10 @@ formatted with genes (or proteins) as rows and tissues as columns.
 
 ```{r classify_genes_example, eval = FALSE}
 # Example expression matrix (genes x tissues)
-data("tissue_tpm_gtex")
+#Download pre-processing average tissue expression levels among tissues 
+url <- "https://raw.githubusercontent.com/ChrYang/DataSet/main/tissue_tpm_gtex.csv"
+tissue_tpm_gtex <- read.csv(url, row.names=1)
+
 # Classify tissue specificity using gene symbols
 res <- geneClassification(
   expression          = tissue_tpm_gtex,
@@ -404,18 +407,17 @@ head(res)
 
 ### Using predefined tissue groups
 Related tissues can be grouped prior to classification, allowing tissue 
-specificity to be assessed at the designated group rather than the automatically 
-ranked group by expression levels. 
+specificity to be assessed at the designated group rather than the 
+automatically ranked group by expression levels. 
 
-```r
-# Define tissue groups
+```{r define_tissue groups, eval = FALSE}
 data("tissue_map")
 
 # Classify genes using grouped tissues
-res_grouped <- classify_genes(
+res_grouped <- geneClassification(
   expression          = tissue_tpm_gtex,
   tissue_groups       = tissue_map,
-  typeKey             = "Gene",
+  typeKey             = "Ensembl",
   min_expression      = 1,
   secretory_analysis  = FALSE
 )
@@ -438,6 +440,9 @@ If you use `Protein2Tissue` in your work, please also cite the HPA:
 > Uhlen M et al. (2017). A pathology atlas of the human cancer
 > transcriptome. *Science*, 357(6352).
 > <https://doi.org/10.1126/science.aan2507>
+
+> GTEx Consortium (2013). The Genotype-Tissue Expression (GTEx) project.
+> Nature Genetics, 45(6). <https://doi.org/10.1038/ng.2653>
 
 # Session information
 

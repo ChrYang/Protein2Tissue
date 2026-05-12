@@ -1,10 +1,10 @@
 Package: Protein2Tissue
 Title: An R package for tissue expression analysis and gene set enrichment
-Version: 0.99.0
+Version: 0.99.1
 Authors@R: c(
     person(given   = "Chaoran",
            family  = "Yang",
-           email   = "chaoran.yang@monash.edu",
+           email   = "chr.mt.yang@outlook.com",
            role    = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-6639-8136")),
     person(given   = "Yao",
@@ -12,17 +12,15 @@ Authors@R: c(
            email   = "emmachentar@live.com",
            role    = "aut",
            comment = c(ORCID = "0000-0001-8172-3996")))
-Description: A package for analysing tissue-specific gene expression
-    patterns. An example gene expression data is derived from the Human Protein Atlas
-    (https://www.proteinatlas.org).
-biocViews: Tissue, MutipleComparison, GeneExpression, Visualization, Network, GO
+Description: Protein2Tissue provides a comprehensive framework for analysing tissue-specific gene and protein expression patterns. The package allows users to map genes or proteins to their predominant tissue types, perform tissue-based enrichment analysis on gene sets, and explore expression profiles across a wide range of human tissues. Reference expression data is derived from publicly available databases the Human Protein Atlas (https://www.proteinatlas.org).
+biocViews: Proteomics, Transcriptomics, GeneSetEnrichment, Network
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: false
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Depends: 
-    R (>= 4.3.0)
+    R (>= 4.4.0)
 Imports:
     dplyr,
     igraph,

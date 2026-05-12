@@ -35,15 +35,15 @@ analysis to secretory proteins only (i.e. rows where \code{Is_secreted}
 is \code{TRUE}). Default is \code{FALSE}.}
 
 \item{tissueToTest}{The tissue in which the input proteins or genes are
-tested for enrichment. Must be one of the tissue listed in the \code{database}
-provided. Tissues in the default database are c("Adipose tissue","Breast",
-"Seminal vesicle","Parathyroid gland","Bone marrow","Lung","Lymphoid tissue",
-"Liver","Testis","Brain","Esophagus","Gallbladder","Intestine","Pancreas",
-"Ovary","Kidney","Placenta", "Cervix","Skin","Endometrium","Skeletal muscle",
-"Retina","Tongue","Heart muscle", "Choroid plexus","Fallopian tube",
-"Epididymis","Salivary gland","Vagina","Smooth muscle","Adrenal gland",
-"Blood vessel", "Pituitary gland","Stomach","Urinary bladder",
-"Thyroid gland","Prostate")}
+tested for enrichment. Must be one of the tissue listed in the
+\code{database} provided. Tissues in the default database are c("Adipose
+tissue","Breast", "Seminal vesicle","Parathyroid gland","Bone marrow",
+"Lung","Lymphoid tissue", "Liver","Testis","Brain","Esophagus",
+"Gallbladder","Intestine","Pancreas", "Ovary","Kidney","Placenta", "Cervix",
+"Skin","Endometrium","Skeletal muscle", "Retina","Tongue","Heart muscle",
+"Choroid plexus","Fallopian tube", "Epididymis","Salivary gland","Vagina",
+"Smooth muscle","Adrenal gland", "Blood vessel", "Pituitary gland",
+"Stomach","Urinary bladder", "Thyroid gland","Prostate")}
 }
 \value{
 A data frame of matched input genes with reference database
@@ -52,7 +52,7 @@ parameter.
 }
 \description{
 Performs enrichment analysis in the tissue designated by the
-parameter \item{tissueToTest} by mapping input genes or proteins against
+parameter \code{tissueToTest} by mapping input genes or proteins against
 a reference expression database. Genes or proteins not found in the database
 are removed with a warning, and the matched results are returned as a data
 frame showing genes or proteins enriched in the corresponding tissue.
@@ -66,9 +66,9 @@ If no proteins are found in the database, the function stops with
 an informative error message.
 }
 \examples{
-\dontrun{
+\donttest{
 # using gene symbols for input, Ensembl IDs for background
-result2 <- tissueAnalysis(
+result2 <- tissueAnalysis2(
   input          = c("BRCA1", "EGFR"),
   typeKey        = "Gene",
   database       = NULL,

@@ -11,8 +11,10 @@ A data frame with \code{n} rows and the following columns:
 \item{Ensembl}{Ensembl gene identifier}
 \item{EntrezID}{NCBI Entrez ID}
 \item{Uniprot}{UNIPROT ID}
-\item{Is_secreted}{Whether the protein is a predicted secretory protein  or not}
-\item{Tissue.specificity}{expression category, one of \code{"Tissue enhanced"},
+\item{Is_secreted}{Whether the protein is a predicted secretory protein
+or not}
+\item{Tissue.specificity}{expression category, one of \code{"Tissue 
+  enhanced"},
 \code{"Group enriched"}, or \code{"Tissue enriched"}}
 
 \item{tissue}{tissue names}

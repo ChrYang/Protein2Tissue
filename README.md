@@ -300,7 +300,9 @@ The input expression matrix must have:
 
 Example:
 ```r
-data("tissue_tpm_gtex")
+#Download pre-processing average tissue expression levels among tissues 
+url <- "https://raw.githubusercontent.com/ChrYang/DataSet/main/tissue_tpm_gtex.csv"
+tissue_tpm_gtex <- read.csv(url, row.names=1)
 
 res <- geneClassification(
   expression          = tissue_tpm_gtex,
@@ -324,10 +326,10 @@ Example:
 ```r
 data("tissue_map")
 
-res_grouped <- classify_genes(
+res_grouped <- geneClassification(
   expression          = tissue_tpm_gtex,
   tissue_groups       = tissue_map,
-  typeKey             = "Gene",
+  typeKey             = "Ensembl",
   min_expression      = 1,
   secretory_analysis  = FALSE
 )

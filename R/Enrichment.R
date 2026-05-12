@@ -4,7 +4,8 @@
 #' the enrichment results of input and background protein lists.
 #'
 #' @slot input An object containing enrichment results for the input set
-#' @slot background An object containing enrichment results for the background set
+#' @slot background An object containing enrichment results for the background 
+#' set
 #'
 #' @export
 setClass(

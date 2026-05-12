@@ -48,10 +48,12 @@
 #' specified in \code{padj}.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' result <- tissueAnalysis(
 #'     input      = c("TP53", "BRCA1", "EGFR"),
-#'     background = c("347", "948", "1050", "2167", "2819", "3625")
+#'     background = c("347", "948", "1050", "2167", "2819", "3625"),
+#'     typeKey    = "Gene",
+#'     typeKeyBg  = "EntrezID"
 #' )
 #'
 #' # run Fisher's exact test across all tissues

@@ -41,8 +41,7 @@
 #' database \code{ee_tb} which contains multiple identifier columns.
 #'
 #' @examples
-#' \dontrun{
-#' # using gene symbols for input, Ensembl IDs for background
+#' \donttest{
 #' result <- tissueAnalysis(
 #'     input      = c("TP53", "BRCA1", "EGFR"),
 #'     background = c("347", "948", "1050", "2167", "2819", "3625"),
@@ -80,10 +79,11 @@ tissueAnalysis <- function(input,
   
     # --- input validation ---
     stopifnot(
-        "'input' must be a non-empty vector"                              = length(input) > 0,
-        "'background' must be a non-empty vector or left as default"      = length(input) > 0,
-        "'typeKey' must be a character string"                            = is.character(typeKey),
-        "'typeKeyBg' must be a character string"                          = is.character(typeKeyBg)
+        "'input' must be a non-empty vector" = length(input) > 0,
+        "'background' must be a non-empty vector or left as default" = 
+          length(input) > 0,
+        "'typeKey' must be a character string" = is.character(typeKey),
+        "'typeKeyBg' must be a character string" = is.character(typeKeyBg)
     )
     
     stopifnot(

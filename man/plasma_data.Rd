@@ -8,9 +8,11 @@
 A data frame with \code{n} rows and 4 columns:
 \describe{
 \item{UniqueSymbol}{Character. Protein or gene identifier.}
-\item{Coefficient.Age}{Numeric. Estimated effect size for association with age.}
+\item{Coefficient.Age}{Numeric. Estimated effect size for association with
+age.}
 \item{p.Age}{Numeric. Raw p-value for the age association.}
-\item{q.Age}{Numeric. Adjusted p-value (q-value) controlling for multiple testing.}
+\item{q.Age}{Numeric. Adjusted p-value (q-value) controlling for multiple
+testing.}
 }
 }
 \source{

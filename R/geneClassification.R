@@ -76,15 +76,16 @@
 #' @importFrom utils data
 #'
 #' @examples
-#' \dontrun{
-#' # Example expression matrix (genes x tissues)
-#' # Classify tissue specificity using gene symbols
-#' res <- classify_genes(
-#'   expression = expr,
-#'   typeKey = "Gene",
-#'   min_expression = 1,
-#'   secretory_analysis = FALSE
-#' )
+#' \donttest{
+#' url <- "https://raw.githubusercontent.com/ChrYang/DataSet/main/tissue_tpm_gtex.csv"
+#' tissue_tpm_gtex <- read.csv(url, row.names=1)
+
+#' res <- geneClassification(
+#'  expression          = tissue_tpm_gtex,
+#'  typeKey             = "Ensembl",
+#'  min_expression      = 1,
+#'  secretory_analysis  = FALSE
+#')
 #'
 #' head(res)
 #'
@@ -94,10 +95,10 @@
 #'   Group  = c("Colon", "Colon", "Liver")
 #' )
 #'
-#' res_grouped <- classify_genes(
-#'   expression = expr,
+#' res_grouped <- geneClassification(
+#'   expression = tissue_tpm_gtex,
 #'   tissue_groups = tissue_groups,
-#'   typeKey = "Gene",
+#'   typeKey = "Ensembl",
 #'   min_expression = 1,
 #'   secretory_analysis = FALSE
 #' )
@@ -169,12 +170,12 @@ geneClassification <- function(expression,
     out <- merge(database, out, by = typeKey)
     
     message(
-      paste0(orig_n - nrow(out),
-             " feature(s) removed due to missing database annotation.")
+      orig_n - nrow(out),
+             " feature(s) removed due to missing database annotation."
     )
     
     keep <- !is.na(out$Gene) & !is.na(out$Ensembl) & !is.na(out$EntrezID)
-    message(paste0(sum(!keep), " feature(s) removed due to invalid IDs."))
+    message(sum(!keep), " feature(s) removed due to invalid IDs.")
     
     out <- out[keep, , drop = FALSE]
     
@@ -187,15 +188,13 @@ geneClassification <- function(expression,
     out$Gene <- out$Ensembl <- out$EntrezID <- out$Uniprot <- NA
     
     map_ids <- function(keys, column, keytype) {
-      suppressMessages(
         AnnotationDbi::mapIds(
-          org.Hs.eg.db::org.Hs.eg.db,
-          keys = keys,
-          column = column,
-          keytype = keytype,
-          multiVals = "first"
+            org.Hs.eg.db::org.Hs.eg.db,
+            keys = keys,
+            column = column,
+            keytype = keytype,
+            multiVals = "first"
         )
-      )
     }
     
     if (typeKey == "Gene") {
@@ -220,7 +219,7 @@ geneClassification <- function(expression,
     }
     
     keep <- !is.na(out$Gene) & !is.na(out$Ensembl) & !is.na(out$EntrezID)
-    message(paste0(sum(!keep), " feature(s) removed due to invalid IDs."))
+    message(sum(!keep), " feature(s) removed due to invalid IDs.")
     
     out <- out[keep, , drop = FALSE]
     
@@ -230,7 +229,8 @@ geneClassification <- function(expression,
   }
   
   # Reorder expression to match output
-  expression <- expression[match(out[, typeKey], rownames(expression)), , drop = FALSE]
+  expression <- expression[match(out[, typeKey], rownames(expression)), , 
+                           drop = FALSE]
   
   # -----------------------------
   # Main classification loop
@@ -256,7 +256,8 @@ geneClassification <- function(expression,
       next
     }
     
-    is_group_enriched <- FALSE # logic showing whether the gene is group enriched
+    is_group_enriched <- FALSE # logic showing whether the gene is group 
+    # enriched
     
     # Group enriched (with or without predefined groups)
     if (is.null(tissue_groups)) {
@@ -264,12 +265,13 @@ geneClassification <- function(expression,
       xs <- sort(x, decreasing = TRUE)
       names(xs) <- tissues[order(x, decreasing = TRUE)]
       
-      for (k in 2:min(7, length(xs) - 1)) {
-        if (mean(xs[1:k]) >= 4 * max(xs[(k + 1):length(xs)])) {
-          out[i, c("Tissue.specificity", names(xs[1:k]))] <- "Group enriched"
-          is_group_enriched <- TRUE
-          break
-        }
+      for (k in seq(2, min(7, length(xs) - 1))) {
+          if (mean(xs[seq_len(k)]) >= 4 * max(xs[seq(k + 1, length(xs))])) {
+              out[i, c("Tissue.specificity", names(xs[seq_len(k)]))] <- 
+                  "Group enriched"
+              is_group_enriched <- TRUE
+              break
+          }
       }
       
     } else {
@@ -301,9 +303,10 @@ geneClassification <- function(expression,
 
   }
   
-  out$Tissue.specificity[is.na(out$Tissue.specificity)] <- "Low tissue specificity"
+  out$Tissue.specificity[is.na(out$Tissue.specificity)] <- 
+      "Low tissue specificity"
   
-  rownames(out) <- 1:nrow(out)
+  rownames(out) <- seq_len(nrow(out))
   
   out
 }

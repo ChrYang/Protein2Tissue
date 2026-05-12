@@ -22,7 +22,7 @@
 #' are rounded to 3 decimal places and displayed to the right of the bars.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' result <- tissueAnalysis(
 #'     input      = c("TP53", "BRCA1", "EGFR"),
 #'     background = c("347", "948", "1050", "2167", "2819", "3625")

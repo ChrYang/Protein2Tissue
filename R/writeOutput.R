@@ -9,7 +9,7 @@
 #' @return Invisibly returns \code{NULL}. Called for its side effect of
 #'   writing a file to disk.
 #'#' @examples
-#' \dontrun{
+#' \donttest{
 #' writeOutput(result,type = "csv","~/Enrichment_Results.csv")
 #' }
 #'

@@ -35,10 +35,20 @@ tissue-specific or group-enriched expression patterns, using
 \code{\link[clusterProfiler]{enrichGO}}.
 }
 \examples{
-\dontrun{
-  data(exampleData)
-  result <- goEnriched(exampleData, type = "BP", tissueTest = "liver")
-  print(result)
+\donttest{
+data("plasma_data", package = "Protein2Tissue")
+myList <- plasma_data \%>\%
+   filter(Coefficient.Age > 0 & q.Age < 0.05) \%>\%
+   pull(UniqueSymbol) \%>\%
+   toupper()
+myBackground <-  toupper(plasma_data$UniqueSymbol)
+result <- tissueAnalysis(
+   input      = myList,
+   background = myBackground,
+   typeKey    = "Gene",      # identifier type for input
+   typeKeyBg  = "Gene",   # identifier type for background
+)
+ goEnriched(result, type = "BP", tissueTest = "Liver", inclusion = "All")
 }
 
 }

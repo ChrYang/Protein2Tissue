@@ -84,14 +84,14 @@ provided by the \pkg{Protein2Tissue} package. Genes not present in this
 database are removed.
 }
 \examples{
-\dontrun{
-# Example expression matrix (genes x tissues)
-# Classify tissue specificity using gene symbols
-res <- classify_genes(
-  expression = expr,
-  typeKey = "Gene",
-  min_expression = 1,
-  secretory_analysis = FALSE
+\donttest{
+url <- "https://raw.githubusercontent.com/ChrYang/DataSet/main/tissue_tpm_gtex.csv"
+tissue_tpm_gtex <- read.csv(url, row.names=1)
+res <- geneClassification(
+ expression          = tissue_tpm_gtex,
+ typeKey             = "Ensembl",
+ min_expression      = 1,
+ secretory_analysis  = FALSE
 )
 
 head(res)
@@ -102,10 +102,10 @@ tissue_groups <- data.frame(
   Group  = c("Colon", "Colon", "Liver")
 )
 
-res_grouped <- classify_genes(
-  expression = expr,
+res_grouped <- geneClassification(
+  expression = tissue_tpm_gtex,
   tissue_groups = tissue_groups,
-  typeKey = "Gene",
+  typeKey = "Ensembl",
   min_expression = 1,
   secretory_analysis = FALSE
 )

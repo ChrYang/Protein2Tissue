@@ -11,9 +11,15 @@
 #'   small points. Edges are coloured by signal category.
 #'
 #' @examples
-#' \dontrun{
-#'   data(exampleData)
-#'   p <- networkPlot(exampleData)
+#' \donttest{
+#' result <- tissueAnalysis(
+#'     input      = c("TP53", "BRCA1", "EGFR"),
+#'     background = c("347", "948", "1050", "2167", "2819", "3625"),
+#'     typeKey    = "Gene",
+#'     typeKeyBg  = "EntrezID",
+#'     database   = NULL
+#' )
+#'   p <- networkPlot(result)
 #'   print(p)
 #' }
 #'
@@ -72,7 +78,8 @@ networkPlot <- function(out) {
         
         ## Tissue hubs: large bold circles
         ggraph::geom_node_point(
-            data   = function(nodes) dplyr::filter(nodes, nodes$type == "Tissue"),
+            data   = function(nodes) dplyr::filter(nodes, 
+                                                   nodes$type == "Tissue"),
             ggplot2::aes(x = x, y = y),
             shape  = 21,
             size   = 14,
@@ -83,7 +90,8 @@ networkPlot <- function(out) {
         
         ## Tissue labels inside hubs
         ggraph::geom_node_text(
-            data     = function(nodes) dplyr::filter(nodes, nodes$type == "Tissue"),
+            data     = function(nodes) dplyr::filter(nodes, 
+                                                     nodes$type == "Tissue"),
             ggplot2::aes(label = name),
             size     = 3,
             fontface = "bold"

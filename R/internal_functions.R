@@ -3,8 +3,8 @@
 #' Process and Validate a Protein List Against the Reference Database
 #'
 #' Internal helper function that validates a protein list against the reference
-#' expression database like the default one \code{ee_tb}, removes unmatched proteins, 
-#' and returns a cleaned data frame.
+#' expression database like the default one \code{ee_tb}, removes unmatched 
+#' proteins, and returns a cleaned data frame.
 #'
 #' @param proteinList A character vector of protein identifiers.
 #' @param typeKey A character string specifying the identifier column in
@@ -150,7 +150,7 @@
     result   <- out@input
     resultBg <- out@background
     
-    tissueCols <- names(out@input)[-c(1:6)]
+    tissueCols <- names(out@input)[-seq_len(6)]
     
     # --- pivot input to long format ---
     dfLong <- result |>
@@ -175,8 +175,10 @@
     # --- filter based on removeNA ---
     if (!removeNA) {
         
-        dfLong   <- dfLong   |> dplyr::filter(signal %in% inclusion | is.na(signal))
-        dfLongBg <- dfLongBg |> dplyr::filter(signal %in% inclusion | is.na(signal))
+        dfLong   <- dfLong   |> 
+            dplyr::filter(signal %in% inclusion | is.na(signal))
+        dfLongBg <- dfLongBg |> 
+            dplyr::filter(signal %in% inclusion | is.na(signal))
         
     } else {
         

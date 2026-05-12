@@ -59,8 +59,7 @@ proteins and background proteins can use different identifier systems
 database \code{ee_tb} which contains multiple identifier columns.
 }
 \examples{
-\dontrun{
-# using gene symbols for input, Ensembl IDs for background
+\donttest{
 result <- tissueAnalysis(
     input      = c("TP53", "BRCA1", "EGFR"),
     background = c("347", "948", "1050", "2167", "2819", "3625"),

@@ -6,8 +6,8 @@
 \title{An example of the data frame the for the 'tissue_groups' parameter of
 \code{geneClassification}.}
 \format{
-An example of the data frame the for the 'tissue_groups' parameter of
-\code{geneClassification}. This data frame has two columns named
+An example of the data frame the for the 'tissue_groups' parameter
+of \code{geneClassification}. This data frame has two columns named
 \code{Tissue} and \code{Group}, defining predefined tissue groupings for
 group-enriched analysis.
 }
