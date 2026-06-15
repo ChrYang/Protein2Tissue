@@ -14,7 +14,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-8172-3996")))
 Description: Protein2Tissue provides a comprehensive framework for analysing tissue-specific gene and protein expression patterns. The package allows users to map genes or proteins to their predominant tissue types, perform tissue-based enrichment analysis on gene sets, and explore expression profiles across a wide range of human tissues. Reference expression data is derived from publicly available databases the Human Protein Atlas (https://www.proteinatlas.org).
 biocViews: Proteomics, Transcriptomics, GeneSetEnrichment, Network
-License: Artistic-2.0
+License: file LICENSE
 Encoding: UTF-8
 LazyData: false
 Roxygen: list(markdown = TRUE)
@@ -23,18 +23,20 @@ Depends:
     R (>= 4.4.0)
 Imports:
     dplyr,
+    tidyr,
     igraph,
     ggraph,
     ggplot2,
+    ggpubr,
     clusterProfiler,
     AnnotationDbi,
-    org.Hs.eg.db
+    org.Hs.eg.db,
+    methods
 Suggests: 
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
-    BiocStyle,
-    org.Hs.eg.db
+    BiocStyle
 VignetteBuilder: knitr
 URL: https://github.com/chryang/Protein2Tissue
 BugReports: https://github.com/chryang/Protein2Tissue/issues

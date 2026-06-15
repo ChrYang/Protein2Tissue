@@ -14,7 +14,8 @@
 #' }
 #'
 #' @keywords write
-#' @noRd
+#' @export
+
 writeOutput <- function(out, type = "csv", filename) {
   
   # --- input validation ---

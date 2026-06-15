@@ -25,7 +25,10 @@
 #' \donttest{
 #' result <- tissueAnalysis(
 #'     input      = c("TP53", "BRCA1", "EGFR"),
-#'     background = c("347", "948", "1050", "2167", "2819", "3625")
+#'     background = c("347", "948", "1050", "2167", "2819", "3625"),
+#'     typeKey    = "Gene",
+#'     typeKeyBg  = "EntrezID",
+#'     database   = NULL
 #' )
 #'
 #' fisherResult <- fisherByTissue(result, padj = "BH")
@@ -70,8 +73,8 @@ fisherPlot <- function(fisherTable) {
     
     # --- p-value annotation data frame ---
     pvalDf <- fisherTable |>
-        dplyr::select(tissue, padj) |>
-        dplyr::mutate(padj_value = round(as.numeric(padj), 3))
+        dplyr::select(tissue, p_adj) |>
+        dplyr::mutate(padj_value = round(as.numeric(p_adj), 3))
     
     # --- plot ---
     p <- ggplot2::ggplot(

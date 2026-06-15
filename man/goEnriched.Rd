@@ -37,10 +37,10 @@ tissue-specific or group-enriched expression patterns, using
 \examples{
 \donttest{
 data("plasma_data", package = "Protein2Tissue")
-myList <- plasma_data \%>\%
-   filter(Coefficient.Age > 0 & q.Age < 0.05) \%>\%
-   pull(UniqueSymbol) \%>\%
-   toupper()
+tmp <- dplyr::filter(plasma_data, Coefficient.Age > 0 & q.Age < 0.05)
+tmp <- dplyr::pull(tmp, UniqueSymbol)
+myList <- toupper(tmp)
+
 myBackground <-  toupper(plasma_data$UniqueSymbol)
 result <- tissueAnalysis(
    input      = myList,

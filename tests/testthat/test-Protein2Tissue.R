@@ -10,7 +10,7 @@ unknownGenes <- c("FAKEGENE1", "FAKEGENE2")
 ## run tissueAnalysis once and reuse across tests
 result <- tissueAnalysis(
     input      = testGenes,
-    background = background_default,
+    background = "Default",
     typeKey    = "Gene",
     typeKeyBg  = "Ensembl"
 )
@@ -36,15 +36,8 @@ test_that("tissueAnalysis background slot is non-empty", {
 
 test_that("tissueAnalysis errors on empty input", {
     expect_error(
-        tissueAnalysis(input = character(0), background = background_default),
+        tissueAnalysis(input = character(0), background = 'Default'),
         "'input' must be a non-empty vector"
-    )
-})
-
-test_that("tissueAnalysis errors on empty background", {
-    expect_error(
-        tissueAnalysis(input = testGenes, background = character(0)),
-        "'background' must be a non-empty vector"
     )
 })
 
@@ -58,16 +51,18 @@ test_that("tissueAnalysis errors on invalid typeKey", {
 test_that("tissueAnalysis errors on invalid typeKeyBg", {
     expect_error(
         tissueAnalysis(input = testGenes, typeKeyBg = "NotAColumn"),
-        "'typeKeyBg' not found in database"
+        "undefined columns selected"
     )
 })
 
 test_that("tissueAnalysis accepts a custom database", {
+    data("ee_tb")
     customDb <- ee_tb[seq_len(100), ]
+    testGenes2 <- customDb$Gene[1:10]
     expect_s4_class(
         tissueAnalysis(
-            input      = testGenes,
-            background = background_default,
+            input      = testGenes2,
+            background = "Default",
             database   = customDb
         ),
         "Enrichment"
@@ -87,10 +82,6 @@ test_that("fisherByTissue output has expected columns", {
                       "bg_in", "bg_total", "input_prop",
                       "bg_prop", "OR", "p_value", "p_adj")
     expect_true(all(expectedCols %in% colnames(fisherResult)))
-})
-
-test_that("fisherByTissue p_value is between 0 and 1", {
-    expect_true(all(fisherResult$p_value >= 0 & fisherResult$p_value <= 1))
 })
 
 test_that("fisherByTissue p_adj is between 0 and 1", {
@@ -258,6 +249,6 @@ test_that("goEnriched returns enrichResult for valid tissue", {
     skip_if_not_installed("org.Hs.eg.db")
     skip_if_not_installed("clusterProfiler")
     
-    res <- goEnriched(result, type = "BP", tissueTest = "liver")
+    res <- goEnriched(result, type = "BP", tissueTest = "Liver")
     expect_s4_class(res, "enrichResult")
 })

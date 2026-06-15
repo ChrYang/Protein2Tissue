@@ -34,7 +34,10 @@ are rounded to 3 decimal places and displayed to the right of the bars.
 \donttest{
 result <- tissueAnalysis(
     input      = c("TP53", "BRCA1", "EGFR"),
-    background = c("347", "948", "1050", "2167", "2819", "3625")
+    background = c("347", "948", "1050", "2167", "2819", "3625"),
+    typeKey    = "Gene",
+    typeKeyBg  = "EntrezID",
+    database   = NULL
 )
 
 fisherResult <- fisherByTissue(result, padj = "BH")

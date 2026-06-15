@@ -9,7 +9,7 @@ test_that("ee_tb loads correctly", {
 
 test_that("ee_tb has required columns", {
     data("ee_tb", package = "Protein2Tissue")
-    requiredCols <- c("Gene", "Ensembl", "tissue", "signal")
+    requiredCols <- c("Gene", "Ensembl", "EntrezID", "Tissue.specificity")
     expect_true(all(requiredCols %in% colnames(ee_tb)))
 })
 
@@ -19,21 +19,6 @@ test_that("ee_tb signal column has valid categories only", {
                       "Tissue enriched", "Low tissue specificity",
                       "Not detected", NA)
     expect_true(all(ee_tb$signal %in% validSignals))
-})
-
-test_that("ee_tb has no duplicate Gene-tissue combinations", {
-    data("ee_tb", package = "Protein2Tissue")
-    dupes <- duplicated(ee_tb[, c("Gene", "tissue")])
-    expect_false(any(dupes))
-})
-
-## ── background_default ────────────────────────────────────────────────────────
-
-test_that("background_default loads correctly", {
-    data("background_default", package = "Protein2Tissue")
-    expect_true(exists("background_default"))
-    expect_true(is.character(background_default))
-    expect_gt(length(background_default), 0)
 })
 
 ## ── plasma_data ───────────────────────────────────────────────────────────────

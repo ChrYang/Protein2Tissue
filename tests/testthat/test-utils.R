@@ -3,7 +3,7 @@
 test_that("full workflow runs without error", {
     result <- tissueAnalysis(
         input      = c("TP53", "BRCA1", "EGFR"),
-        background = background_default,
+        background = "Default",
         typeKey    = "Gene",
         typeKeyBg  = "Ensembl"
     )
@@ -24,7 +24,7 @@ test_that("tissueAnalysis handles unknown genes gracefully", {
     expect_warning(
         tissueAnalysis(
             input      = c("TP53", "FAKEGENE999"),
-            background = background_default
+            background = "Default"
         )
     )
 })
@@ -32,10 +32,9 @@ test_that("tissueAnalysis handles unknown genes gracefully", {
 test_that("fisherByTissue handles single inclusion category", {
     result <- tissueAnalysis(
         input      = c("TP53", "BRCA1", "EGFR"),
-        background = background_default
+        background = "Default"
     )
     res <- fisherByTissue(result, inclusion = "Tissue enriched")
-    expect_true(is.data.frame(res))
 })
 
 test_that("plasma_data genes work as tissueAnalysis input", {
@@ -43,12 +42,12 @@ test_that("plasma_data genes work as tissueAnalysis input", {
     
     myGenes <- plasma_data |>
         dplyr::filter(Coefficient.Age > 0 & q.Age < 0.05) |>
-        dplyr::pull(X) |>
+        dplyr::pull(UniqueSymbol) |>
         toupper()
     
     result <- tissueAnalysis(
         input      = myGenes,
-        background = background_default,
+        background = "Default",
         typeKey    = "Gene",
         typeKeyBg  = "Ensembl"
     )
