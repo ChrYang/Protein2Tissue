@@ -93,7 +93,7 @@ fisherPlot <- function(fisherTable) {
             ggplot2::aes(label = proportion),
             position = ggplot2::position_dodge(width = 0.8),
             hjust    = -0.05,
-            size     = 3
+            size     = 4.5
         ) +
         ggplot2::geom_text(
             data         = pvalDf,
@@ -103,7 +103,7 @@ fisherPlot <- function(fisherTable) {
                 label = paste0("p=", padj_value)
             ),
             inherit.aes = FALSE,
-            size        = 3
+            size        = 4.5
         ) +
         ggplot2::coord_flip() +
         ggplot2::labs(
@@ -125,7 +125,12 @@ fisherPlot <- function(fisherTable) {
         ) +
         ggplot2::theme_classic() +
         ggplot2::theme(
-            legend.position = "top"
+            legend.position = "top",
+            plot.title       = ggplot2::element_text(size = 14, face = "bold"),
+            plot.subtitle    = ggplot2::element_text(size = 11, color = "gray40"),
+            axis.title       = ggplot2::element_text(size = 12),
+            axis.text        = ggplot2::element_text(size = 11),
+            legend.text      = ggplot2::element_text(size = 11)
         )
     
     p

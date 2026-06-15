@@ -10,6 +10,14 @@
 #'   writing a file to disk.
 #'#' @examples
 #' \donttest{
+#' result <- tissueAnalysis(
+#'     input      = c("TP53", "BRCA1", "EGFR"),
+#'     background = c("347", "948", "1050", "2167", "2819", "3625"),
+#'     typeKey    = "Gene",
+#'     typeKeyBg  = "EntrezID",
+#'     database   = NULL
+#' )
+#' 
 #' writeOutput(result,type = "csv","~/Enrichment_Results.csv")
 #' }
 #'
