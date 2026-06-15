@@ -9,7 +9,7 @@ fisherPlot(fisherTable)
 \arguments{
 \item{fisherTable}{A data frame output from \code{\link{fisherByTissue}},
 containing columns \code{tissue}, \code{input_prop}, \code{bg_prop},
-and \code{p_value}.}
+\code{p_value}, and \code{p_adj}.}
 }
 \value{
 A \code{ggplot2} object showing a horizontal grouped bar chart with:
