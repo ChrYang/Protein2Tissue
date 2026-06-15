@@ -5,8 +5,8 @@
 #' from Fisher's exact test.
 #'
 #' @param fisherTable A data frame output from \code{\link{fisherByTissue}},
-#'   containing columns \code{tissue}, \code{input_prop}, \code{bg_prop},
-#'   and \code{p_value}.
+#'   containing columns \code{tissue}, \code{input_prop}, \code{bg_prop}, 
+#'   \code{p_value}, and \code{p_adj}.
 #'
 #' @return A \code{ggplot2} object showing a horizontal grouped bar chart with:
 #'   \itemize{
@@ -48,7 +48,7 @@ fisherPlot <- function(fisherTable) {
         "'fisherTable' must be a data frame" = is.data.frame(fisherTable)
     )
     
-    requiredCols <- c("tissue", "input_prop", "bg_prop", "p_value")
+    requiredCols <- c("tissue", "input_prop", "bg_prop", "p_value","p_adj")
     missingCols  <- requiredCols[!requiredCols %in% colnames(fisherTable)]
     if (length(missingCols) > 0) {
         stop(
@@ -70,8 +70,8 @@ fisherPlot <- function(fisherTable) {
     
     # --- p-value annotation data frame ---
     pvalDf <- fisherTable |>
-        dplyr::select(tissue, p_value) |>
-        dplyr::mutate(p_value = round(as.numeric(p_value), 3))
+        dplyr::select(tissue, padj) |>
+        dplyr::mutate(padj_value = round(as.numeric(padj), 3))
     
     # --- plot ---
     p <- ggplot2::ggplot(
@@ -97,7 +97,7 @@ fisherPlot <- function(fisherTable) {
             ggplot2::aes(
                 x     = tissue,
                 y     = max(tableLong$proportion, na.rm = TRUE) * 1.15,
-                label = paste0("p=", p_value)
+                label = paste0("p=", padj_value)
             ),
             inherit.aes = FALSE,
             size        = 3
