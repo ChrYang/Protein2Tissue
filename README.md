@@ -14,7 +14,7 @@ Results can be explored through multiple visualization and analysis tools,
 including:
 - Tissue specificity overviews
 - Heatmaps
-- Fisher’s exact test–based enrichment
+- exact test–based enrichment
 - Bar charts
 - Gene–tissue network plots
 - Gene Ontology (GO) enrichment analysis
@@ -70,9 +70,9 @@ plotProteinType()       — overview of RNA tissue specificity classes
         ↓
 heatmapEnrich()         — gene × tissue expression fingerprint
         ↓
-fisherByTissue()        — Fisher's exact test per tissue
+testByTissue()        — exact test per tissue
         ↓
-fisherPlot()            — visualise enrichment results
+testPlot()            — visualise enrichment results
         ↓
 networkPlot()           — gene-tissue bipartite network
         ↓
@@ -175,28 +175,28 @@ heatmapEnrich(result)
 ```
 ---
 
-## Step 4 — Fisher’s exact test
+## Step 4 — exact test
 
-`fisherByTissue()` performs Fisher's exact test for each tissue to identify
+`testByTissue()` performs exact test for each tissue to identify
 which tissues are significantly enriched in your input list relative to the
 background:
 
 ```r
-fisherResult <- fisherByTissue(result, padj = "BH")
+testResult <- testByTissue(result, padj = "BH")
 ```
 ---
 
 ## Step 5 — Visualization
 
-`fisherPlot()` generates a horizontal grouped bar chart comparing input
+`testPlot()` generates a horizontal grouped bar chart comparing input
 and background proportions across tissues, annotated with p-values:
 
 ```r
-fisherPlot(fisherResult)
+testPlot(testResult)
 ```
 
 Blue bars show the proportion of input proteins expressed in each tissue;
-grey bars show the background proportion. P-values from Fisher's exact test
+grey bars show the background proportion. P-values from exact test
 are annotated to the right of each tissue.
 
 ---

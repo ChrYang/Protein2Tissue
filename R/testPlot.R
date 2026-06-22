@@ -1,10 +1,10 @@
-#' Plot Fisher's Exact Test Results by Tissue
+#' Plot Exact Test Results by Tissue
 #'
 #' Generates a horizontal grouped bar chart comparing the proportion of input
 #' proteins versus background proteins across tissues, with p-values annotated
-#' from Fisher's exact test.
+#' from exact test.
 #'
-#' @param fisherTable A data frame output from \code{\link{fisherByTissue}},
+#' @param testTable A data frame output from \code{\link{testByTissue}},
 #'   containing columns \code{tissue}, \code{input_prop}, \code{bg_prop}, 
 #'   \code{p_value}, and \code{p_adj}.
 #'
@@ -12,11 +12,11 @@
 #'   \itemize{
 #'     \item Blue bars representing the proportion of input proteins per tissue
 #'     \item Grey bars representing the proportion of background proteins
-#'     \item P-values from Fisher's exact test annotated per tissue
+#'     \item P-values from exact test annotated per tissue
 #'   }
 #'
 #' @details
-#' The function reshapes the Fisher's exact test result table from wide to long
+#' The function reshapes the exact test result table from wide to long
 #' format and plots input and background proportions side by side per tissue.
 #' Tissues are ordered by proportion for easier visual comparison. P-values
 #' are rounded to 3 decimal places and displayed to the right of the bars.
@@ -31,38 +31,39 @@
 #'     database   = NULL
 #' )
 #'
-#' fisherResult <- fisherByTissue(result, padj = "BH")
+#' # run test's exact test across all tissues
+#' testResult <- testByTissue(result)
 #'
 #' # plot results
-#' fisherPlot(fisherResult)
+#' testPlot(testResult)
 #' }
 #'
-#' @seealso \code{\link{fisherByTissue}}, \code{\link{tissueAnalysis}}
+#' @seealso \code{\link{testByTissue}}, \code{\link{tissueAnalysis}}
 #'
 #' @importFrom ggplot2 ggplot aes geom_col geom_text position_dodge coord_flip
 #'   labs scale_fill_manual theme_classic theme element_text
 #' @importFrom tidyr pivot_longer
 #' @importFrom dplyr select mutate
 #' @export
-fisherPlot <- function(fisherTable) {
+testPlot <- function(testTable) {
     
     # --- input validation ---
     stopifnot(
-        "'fisherTable' must be a data frame" = is.data.frame(fisherTable)
+        "'testTable' must be a data frame" = is.data.frame(testTable)
     )
     
     requiredCols <- c("tissue", "input_prop", "bg_prop", "p_value","p_adj")
-    missingCols  <- requiredCols[!requiredCols %in% colnames(fisherTable)]
+    missingCols  <- requiredCols[!requiredCols %in% colnames(testTable)]
     if (length(missingCols) > 0) {
         stop(
-            "Missing required columns in 'fisherTable': ",
+            "Missing required columns in 'testTable': ",
             paste(missingCols, collapse = ", "),
             call. = FALSE
         )
     }
     
     # --- reshape to long format ---
-    tableLong <- fisherTable |>
+    tableLong <- testTable |>
         dplyr::select(tissue, input_prop, bg_prop) |>
         tidyr::pivot_longer(
             cols      = c(input_prop, bg_prop),
@@ -72,7 +73,7 @@ fisherPlot <- function(fisherTable) {
         dplyr::mutate(proportion = round(as.numeric(proportion), 3))
     
     # --- p-value annotation data frame ---
-    pvalDf <- fisherTable |>
+    pvalDf <- testTable |>
         dplyr::select(tissue, p_adj) |>
         dplyr::mutate(padj_value = round(as.numeric(p_adj), 3))
     
@@ -111,7 +112,7 @@ fisherPlot <- function(fisherTable) {
             y        = "Proportion of proteins",
             fill     = "",
             title    = "Protein enrichment by tissue\nInput vs Background",
-            subtitle = "p-values from Fisher's exact test"
+            subtitle = "p-values from exact test"
         ) +
         ggplot2::scale_fill_manual(
             values = c(

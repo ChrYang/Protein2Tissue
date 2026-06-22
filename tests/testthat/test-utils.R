@@ -8,11 +8,11 @@ test_that("full workflow runs without error", {
         typeKeyBg  = "Ensembl"
     )
     
-    fisherResult <- fisherByTissue(result, padj = "BH")
+    testResult <- testByTissue(result, padj = "BH")
     
     expect_s4_class(result, "Enrichment")
-    expect_true(is.data.frame(fisherResult))
-    expect_s3_class(fisherPlot(fisherResult), "ggplot")
+    expect_true(is.data.frame(testResult))
+    expect_s3_class(testPlot(testResult), "ggplot")
     expect_s3_class(heatmapEnrich(result), "ggplot")
     expect_s3_class(plotProteinType(result), "ggplot")
     expect_s3_class(networkPlot(result), "ggplot")
@@ -29,12 +29,12 @@ test_that("tissueAnalysis handles unknown genes gracefully", {
     )
 })
 
-test_that("fisherByTissue handles single inclusion category", {
+test_that("testByTissue handles single inclusion category", {
     result <- tissueAnalysis(
         input      = c("TP53", "BRCA1", "EGFR"),
         background = "Default"
     )
-    res <- fisherByTissue(result, inclusion = "Tissue enriched")
+    res <- testByTissue(result, inclusion = "Tissue enriched")
 })
 
 test_that("plasma_data genes work as tissueAnalysis input", {

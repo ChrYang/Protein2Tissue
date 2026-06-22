@@ -9,6 +9,11 @@
 #'   include in the analysis. Valid options are \code{"Tissue enhanced"},
 #'   \code{"Group enriched"}, and \code{"Tissue enriched"}. Use \code{"All"}
 #'   to include all three categories. Default is \code{"All"}.
+#' @param testMethod A character string specifying the method for statistics 
+#'   tests for the contingency table. Passed to \code{\link[stats]{fisher.test}} 
+#'   or \code{\link[Exact]{exact.test}}. Common options
+#'   include \code{"fisher"}, \code{"barnard"}, and \code{"boschloo"}.
+#'   Default is \code{"fisher"}.
 #' @param padj A character string specifying the method for multiple testing
 #'   correction. Passed to \code{\link[stats]{p.adjust}}. Common options
 #'   include \code{"BH"}, \code{"bonferroni"}, and \code{"none"}.
@@ -33,7 +38,7 @@
 #'   }
 #'
 #' @details
-#' For each tissue, a 2x2 contingency table is constructed and Fisher's exact
+#' For each tissue, a 2x2 contingency table is constructed and exact
 #' test is applied to test whether the proportion of input proteins expressed
 #' in that tissue differs significantly from the background proportion.
 #'
@@ -57,25 +62,29 @@
 #' )
 #'
 #' # run Fisher's exact test across all tissues
-#' fisherResult <- fisherByTissue(result)
+#' testResult <- testByTissue(result)
 #'
 #' # with BH correction and secretory proteins only
-#' fisherResult <- fisherByTissue(
+#' testResult <- testByTissue(
 #'     result,
 #'     inclusion     = c("Tissue enriched", "Tissue enhanced"),
+#'     testMethod    = "barnard",
 #'     padj          = "BH",
 #'     secretoryOnly = TRUE
 #' )
 #' }
 #'
 #' @seealso \code{\link{tissueAnalysis}}, \code{\link{heatmapEnrich}},
-#'   \code{\link[stats]{fisher.test}}, \code{\link[stats]{p.adjust}}
+#'   \code{\link[stats]{fisher.test}}, \code{\link[Exact]{exact.test}}, 
+#'   \code{\link[stats]{p.adjust}}
 #'
 #' @importFrom stats fisher.test p.adjust
 #' @importFrom dplyr filter
+#' @importFrom Exact exact.test
 #' @export
-fisherByTissue <- function(out,
+testByTissue <- function(out,
                            inclusion     = "All",
+                           testMethod    = "fisher",
                            padj          = "none",
                            secretoryOnly = FALSE) {
     
@@ -102,6 +111,16 @@ fisherByTissue <- function(out,
             paste(invalidSignals, collapse = ", "),
             ". Must be one of: ",
             paste(validSignals, collapse = ", "),
+            call. = FALSE
+        )
+    }
+    
+    # validate test method
+    validTest <- c("fisher", "barnard", "boschloo")
+    if (!testMethod %in% validTest) {
+        stop(
+            "'testMethod' must be one of: ",
+            paste(validTest, collapse = ", "),
             call. = FALSE
         )
     }
@@ -149,7 +168,17 @@ fisherByTissue <- function(out,
         d <- nBg - c
         
         mat  <- matrix(c(a, b, c, d), nrow = 2, byrow = TRUE)
-        test <- stats::fisher.test(mat)
+        if (testMethod == "fisher"){
+            test <- stats::fisher.test(mat)
+        }
+        
+        if (testMethod == "barnard"){
+            test <- exact.test(mat, method = "z-pooled", to.plot = FALSE)
+        }
+        
+        if (testMethod == "boschloo"){
+            test <- exact.test(mat, method = "boschloo", to.plot = FALSE)
+        }
         
         data.frame(
             tissue      = tissueName,

@@ -199,21 +199,21 @@ Rows are genes and columns are tissues. Colour indicates the signal
 category — orange cells indicate no tissue-specific signal for that
 gene-tissue combination.
 
-## Step 4 — Fisher's exact test
+## Step 4 — exact test
 
-`fisherByTissue()` performs Fisher's exact test for each tissue to identify
+`testByTissue()` performs exact test for each tissue to identify
 which tissues are significantly enriched in your input list relative to the
 background:
 
-```{r fisher, eval = FALSE}
-fisherResult <- fisherByTissue(
+```{r exact test, eval = FALSE}
+testResult <- testByTissue(
     result,
     inclusion     = "All",
     padj          = "BH",
     secretoryOnly = FALSE
 )
 
-head(fisherResult)
+head(testResult)
 ```
 
 Each row in the output corresponds to one tissue and contains:
@@ -228,30 +228,30 @@ Each row in the output corresponds to one tissue and contains:
 | `input_prop` | proportion of input proteins in tissue |
 | `bg_prop` | proportion of background proteins in tissue |
 | `OR` | odds ratio |
-| `p_value` | Fisher's exact test p-value |
+| `p_value` | exact test p-value |
 | `p_adj` | adjusted p-value |
 
 To restrict the analysis to secretory proteins only:
 
-```{r fisher_secretory, eval = FALSE}
-fisherResultSecretory <- fisherByTissue(
+```{r exact_test_secretory, eval = FALSE}
+testResultSecretory <- testByTissue(
     result,
     padj          = "BH",
     secretoryOnly = TRUE
 )
 ```
 
-## Step 5 — Visualise Fisher results
+## Step 5 — Visualise test results
 
-`fisherPlot()` generates a horizontal grouped bar chart comparing input
+`testPlot()` generates a horizontal grouped bar chart comparing input
 and background proportions across tissues, annotated with p-values:
 
-```{r fisherPlot, eval = FALSE}
-fisherPlot(fisherResult)
+```{r testPlot, eval = FALSE}
+testPlot(testResult)
 ```
 
 Blue bars show the proportion of input proteins expressed in each tissue;
-grey bars show the background proportion. P-values from Fisher's exact test
+grey bars show the background proportion. P-values from exact test
 are annotated to the right of each tissue.
 
 ## Step 6 — Network visualisation
@@ -330,11 +330,11 @@ plotProteinType(result)
 # --- step 3: heatmap ---
 heatmapEnrich(result)
 
-# --- step 4: Fisher's test ---
-fisherResult <- fisherByTissue(result, padj = "BH")
+# --- step 4: exact test ---
+testResult <- testByTissue(result, padj = "BH")
 
 # --- step 5: bar chart ---
-fisherPlot(fisherResult)
+testPlot(testResult)
 
 # --- step 6: network ---
 networkPlot(result)

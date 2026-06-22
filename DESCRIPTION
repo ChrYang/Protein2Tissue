@@ -31,7 +31,8 @@ Imports:
     clusterProfiler,
     AnnotationDbi,
     org.Hs.eg.db,
-    methods
+    methods,
+    Exact
 Suggests: 
     testthat (>= 3.0.0),
     knitr,

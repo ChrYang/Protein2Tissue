@@ -69,80 +69,87 @@ test_that("tissueAnalysis accepts a custom database", {
     )
 })
 
-## ── fisherByTissue ────────────────────────────────────────────────────────────
+## ── testByTissue ────────────────────────────────────────────────────────────
 
-fisherResult <- fisherByTissue(result, padj = "BH")
+testResult <- testByTissue(result, padj = "BH")
 
-test_that("fisherByTissue returns a data frame", {
-    expect_true(is.data.frame(fisherResult))
+test_that("testByTissue returns a data frame", {
+    expect_true(is.data.frame(testResult))
 })
 
-test_that("fisherByTissue output has expected columns", {
+test_that("testByTissue output has expected columns", {
     expectedCols <- c("tissue", "input_in", "input_total",
                       "bg_in", "bg_total", "input_prop",
                       "bg_prop", "OR", "p_value", "p_adj")
-    expect_true(all(expectedCols %in% colnames(fisherResult)))
+    expect_true(all(expectedCols %in% colnames(testResult)))
 })
 
-test_that("fisherByTissue p_adj is between 0 and 1", {
-    expect_true(all(fisherResult$p_adj >= 0 & fisherResult$p_adj <= 1))
+test_that("testByTissue p_adj is between 0 and 1", {
+    expect_true(all(testResult$p_adj >= 0 & testResult$p_adj <= 1))
 })
 
-test_that("fisherByTissue OR is non-negative", {
-    expect_true(all(fisherResult$OR >= 0, na.rm = TRUE))
+test_that("testByTissue OR is non-negative", {
+    expect_true(all(testResult$OR >= 0, na.rm = TRUE))
 })
 
-test_that("fisherByTissue errors on non-Enrichment input", {
+test_that("testByTissue errors on non-Enrichment input", {
     expect_error(
-        fisherByTissue(data.frame(x = 1)),
+        testByTissue(data.frame(x = 1)),
         "'out' must be an Enrichment object"
     )
 })
 
-test_that("fisherByTissue errors on invalid inclusion", {
+test_that("testByTissue errors on invalid inclusion", {
     expect_error(
-        fisherByTissue(result, inclusion = "InvalidCategory"),
+        testByTissue(result, inclusion = "InvalidCategory"),
         "Invalid inclusion value"
     )
 })
 
-test_that("fisherByTissue errors on invalid padj method", {
+test_that("testByTissue errors on invalid test method", {
     expect_error(
-        fisherByTissue(result, padj = "notamethod"),
+        testByTissue(result, testMethod = "notamethod"),
+        "'testMethod' must be one of"
+    )
+})
+
+test_that("testByTissue errors on invalid padj method", {
+    expect_error(
+        testByTissue(result, padj = "notamethod"),
         "'padj' must be one of"
     )
 })
 
-test_that("fisherByTissue secretoryOnly works without error", {
+test_that("testByTissue secretoryOnly works without error", {
     expect_true(is.data.frame(
-        fisherByTissue(result, secretoryOnly = TRUE)
+        testByTissue(result, secretoryOnly = TRUE)
     ))
 })
 
-test_that("fisherByTissue inclusion subset works", {
-    res <- fisherByTissue(result, inclusion = c("Tissue enriched"))
+test_that("testByTissue inclusion subset works", {
+    res <- testByTissue(result, inclusion = c("Tissue enriched"))
     expect_true(is.data.frame(res))
     expect_gt(nrow(res), 0)
 })
 
-## ── fisherPlot ────────────────────────────────────────────────────────────────
+## ── testPlot ────────────────────────────────────────────────────────────────
 
-test_that("fisherPlot returns a ggplot object", {
-    p <- fisherPlot(fisherResult)
+test_that("testPlot returns a ggplot object", {
+    p <- testPlot(testResult)
     expect_s3_class(p, "ggplot")
 })
 
-test_that("fisherPlot errors on non-data-frame input", {
+test_that("testPlot errors on non-data-frame input", {
     expect_error(
-        fisherPlot("not a data frame"),
-        "'fisherTable' must be a data frame"
+        testPlot("not a data frame"),
+        "'testTable' must be a data frame"
     )
 })
 
-test_that("fisherPlot errors on missing required columns", {
+test_that("testPlot errors on missing required columns", {
     badDf <- data.frame(tissue = "liver", x = 1)
     expect_error(
-        fisherPlot(badDf),
+        testPlot(badDf),
         "Missing required columns"
     )
 })
