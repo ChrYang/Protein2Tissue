@@ -23,7 +23,6 @@
 #'   results for the specified tissue and signal categories.
 #'
 #' @examples
-#' \donttest{
 #' data("plasma_data", package = "Protein2Tissue")
 #' tmp <- dplyr::filter(plasma_data, Coefficient.Age > 0 & q.Age < 0.05)
 #' tmp <- dplyr::pull(tmp, UniqueSymbol)
@@ -37,7 +36,6 @@
 #'    typeKeyBg  = "Gene",   # identifier type for background
 #' )
 #'  goEnriched(result, type = "BP", tissueTest = "Liver", inclusion = "All")
-#' }
 #'
 #' @importFrom dplyr filter
 #' @importFrom clusterProfiler enrichGO

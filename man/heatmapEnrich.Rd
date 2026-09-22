@@ -30,7 +30,6 @@ to show absent signals in the heatmap. Signal categories are colour-coded
 for easy interpretation.
 }
 \examples{
-\donttest{
 result <- tissueAnalysis(
     input      = c("TP53", "BRCA1", "EGFR"),
     background = c("347", "948", "1050", "2167", "2819", "3625"),
@@ -43,7 +42,6 @@ heatmapEnrich(result)
 
 # plot specific categories only
 heatmapEnrich(result, inclusion = c("Tissue enriched", "Tissue enhanced"))
-}
 
 }
 \seealso{

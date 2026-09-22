@@ -46,7 +46,6 @@
 #' 
 #'
 #' @examples
-#' \donttest{
 #' # using gene symbols for input, Ensembl IDs for background
 #' result2 <- tissueAnalysis2(
 #'   input          = c("BRCA1", "EGFR"),
@@ -59,7 +58,6 @@
 #'
 #' # access results
 #' result2
-#' }
 #'
 #' @seealso \code{\link{enrichmentAnalysis}}, \code{\link{Enrichment-class}}
 #'

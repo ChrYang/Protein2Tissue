@@ -33,4 +33,8 @@ expression levels and age and is intended as example input for
 This dataset is adapted from Lehallier et al. (2019), which profiled
 age-associated changes in the human plasma proteome.
 }
+\examples{
+data(plasma_data)
+head(plasma_data) 
+}
 \keyword{datasets}

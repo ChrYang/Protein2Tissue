@@ -18,4 +18,8 @@ tissue_map
 An example of the data frame the for the 'tissue_groups' parameter of
 \code{geneClassification}.
 }
+\examples{
+data(tissue_map)
+head(tissue_map)
+}
 \keyword{datasets}

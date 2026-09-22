@@ -15,7 +15,6 @@
 #' in each specificity class as a horizontal bar chart.
 #'
 #' @examples
-#' \donttest{
 #' result <- tissueAnalysis(
 #'     input      = c("TP53", "BRCA1", "EGFR"),
 #'     background = c("347", "948", "1050", "2167", "2819", "3625"),
@@ -23,7 +22,6 @@
 #'     typeKeyBg  = "EntrezID"
 #' )
 #' plotProteinType(result)
-#' }
 #'
 #' @seealso \code{\link{heatmapEnrich}}, \code{\link{tissueAnalysis}}
 #'

@@ -8,8 +8,7 @@
 #'
 #' @return Invisibly returns \code{NULL}. Called for its side effect of
 #'   writing a file to disk.
-#'#' @examples
-#' \donttest{
+#' @examples
 #' result <- tissueAnalysis(
 #'     input      = c("TP53", "BRCA1", "EGFR"),
 #'     background = c("347", "948", "1050", "2167", "2819", "3625"),
@@ -19,7 +18,6 @@
 #' )
 #' 
 #' writeOutput(result,type = "csv","~/Enrichment_Results.csv")
-#' }
 #'
 #' @keywords write
 #' @export

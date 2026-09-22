@@ -1,6 +1,6 @@
 Package: Protein2Tissue
 Title: An R package for tissue expression analysis and gene set enrichment
-Version: 0.99.2
+Version: 0.99.3
 Authors@R: c(
     person(given   = "Chaoran",
            family  = "Yang",
@@ -41,3 +41,19 @@ Suggests:
 VignetteBuilder: knitr
 URL: https://github.com/chryang/Protein2Tissue
 BugReports: https://github.com/chryang/Protein2Tissue/issues
+Collate: 
+    'AllClasses.R'
+    'AllGenerics.R'
+    'AllMethods.R'
+    'data.R'
+    'geneClassification.R'
+    'goEnriched.R'
+    'heatmapEnrich.R'
+    'internal_functions.R'
+    'networkPlot.R'
+    'plotProteinType.R'
+    'testByTissue.R'
+    'testPlot.R'
+    'tissueAnalysis.R'
+    'tissueAnalysis2.R'
+    'writeOutput.R'

@@ -18,8 +18,11 @@ Must be either \code{"csv"} or \code{"tsv"}. Default is \code{"csv"}.}
 \value{
 Invisibly returns \code{NULL}. Called for its side effect of
 writing a file to disk.
-#' @examples
-\donttest{
+}
+\description{
+Write Enrichment Analysis Output to File
+}
+\examples{
 result <- tissueAnalysis(
     input      = c("TP53", "BRCA1", "EGFR"),
     background = c("347", "948", "1050", "2167", "2819", "3625"),
@@ -29,9 +32,6 @@ result <- tissueAnalysis(
 )
 
 writeOutput(result,type = "csv","~/Enrichment_Results.csv")
-}
-}
-\description{
-Write Enrichment Analysis Output to File
+
 }
 \keyword{write}

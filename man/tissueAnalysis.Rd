@@ -59,7 +59,6 @@ proteins and background proteins can use different identifier systems
 database \code{ee_tb} which contains multiple identifier columns.
 }
 \examples{
-\donttest{
 result <- tissueAnalysis(
     input      = c("TP53", "BRCA1", "EGFR"),
     background = c("347", "948", "1050", "2167", "2819", "3625"),
@@ -69,9 +68,8 @@ result <- tissueAnalysis(
 )
 
 # access results
-result@input
-result@background
-}
+getInput(result)
+getBackground(result)
 
 }
 \seealso{

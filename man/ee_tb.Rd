@@ -33,4 +33,8 @@ ee_tb
 A data frame containing tissue-specific gene expression data
 derived from the Human Protein Atlas (HPA).
 }
+\examples{
+data(ee_tb)
+head(ee_tb)
+}
 \keyword{datasets}

@@ -11,7 +11,6 @@
 #'   small points. Edges are coloured by signal category.
 #'
 #' @examples
-#' \donttest{
 #' result <- tissueAnalysis(
 #'     input      = c("TP53", "BRCA1", "EGFR"),
 #'     background = c("347", "948", "1050", "2167", "2819", "3625"),
@@ -21,7 +20,6 @@
 #' )
 #'   p <- networkPlot(result)
 #'   print(p)
-#' }
 #'
 #' @importFrom dplyr select filter
 #' @importFrom igraph graph_from_data_frame

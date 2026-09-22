@@ -65,7 +65,7 @@ BiocManager::install("Protein2Tissue")
 
 ## Loading the package
 
-```{r load, message = FALSE, eval = FALSE, warning = FALSE}
+```{r load, message = FALSE, eval = TRUE, warning = FALSE}
 library(tidyverse)
 library(Protein2Tissue)
 ```
@@ -78,7 +78,7 @@ The package ships with `ee_tb`, an example gene/protein tissue expression
 data frame derived from the Human Protein Atlas. It contains tissue-specific 
 expression classifications for human genes. It can be inspected directly:
 
-```{r database, eval = FALSE}
+```{r database, eval = TRUE}
 data("ee_tb", package = "Protein2Tissue")
 head(ee_tb)
 ```
@@ -107,7 +107,7 @@ differentially expressed proteins from a plasma proteomics experiment).
 - **Background**: the full set of proteins or genes having been 
 detected in the experiment. If this is not provided, all genes or proteins 
 in the provided database are used as the background.
-```{r inputs, eval = FALSE}
+```{r inputs, eval = TRUE}
 # example input: gene symbols
 data("plasma_data", package = "Protein2Tissue")
 myList <- plasma_data %>%
@@ -130,24 +130,24 @@ tissue expression database.
 database (here we are using the shipped dataset in the package derived from the
 Human Protein Atlas database) and returns an `Enrichment` S4 object:
 
-```{r tissueAnalysis, eval = FALSE}
+```{r tissueAnalysis, eval = TRUE}
 result <- tissueAnalysis(
     input      = myList,
     background = myBackground,
     typeKey    = "Gene",      # identifier type for input
-    typeKeyBg  = "Gene",   # identifier type for background
+    typeKeyBg  = "Gene"   # identifier type for background
 )
 
 ```
 
 The `Enrichment` object has two slots:
 
-```{r slots, eval = FALSE}
+```{r slots, eval = TRUE}
 # matched input proteins with HPA annotations
-result@input[1:6,1:6]
+getInput(result)[1:6,1:6]
 
 # matched background proteins with HPA annotations
-result@background[1:6,1:6]
+getBackground(result)[1:6,1:6]
 ```
 
 A custom database can be substituted if needed:
@@ -161,7 +161,7 @@ result <- tissueAnalysis(
 
 Enrichment results can be saved to disk as CSV or TSV files:
 
-```{r write_output, eval = FALSE}
+```{r write_output, eval = TRUE}
 writeOutput(result,type = "csv","~/Enrichment_Results.csv")
 ```
 
@@ -170,7 +170,7 @@ writeOutput(result,type = "csv","~/Enrichment_Results.csv")
 Before running statistical tests, it is useful to inspect how your input
 genes are distributed across tissue specificity classes:
 
-```{r plotProteinType, eval = FALSE}
+```{r plotProteinType, eval = TRUE}
 plotProteinType(result)
 ```
 
@@ -184,7 +184,7 @@ character of your gene list.
 `heatmapEnrich()` shows the tissue expression signal for each gene in your
 input as a heatmap:
 
-```{r heatmap, eval = FALSE}
+```{r heatmap, eval = TRUE}
 # all signal categories
 heatmapEnrich(result)
 
@@ -205,7 +205,7 @@ gene-tissue combination.
 which tissues are significantly enriched in your input list relative to the
 background:
 
-```{r exact test, eval = FALSE}
+```{r exact test, eval = TRUE}
 testResult <- testByTissue(
     result,
     inclusion     = "All",
@@ -233,7 +233,7 @@ Each row in the output corresponds to one tissue and contains:
 
 To restrict the analysis to secretory proteins only:
 
-```{r exact_test_secretory, eval = FALSE}
+```{r exact_test_secretory, eval = TRUE}
 testResultSecretory <- testByTissue(
     result,
     padj          = "BH",
@@ -246,7 +246,7 @@ testResultSecretory <- testByTissue(
 `testPlot()` generates a horizontal grouped bar chart comparing input
 and background proportions across tissues, annotated with p-values:
 
-```{r testPlot, eval = FALSE}
+```{r testPlot, eval = TRUE}
 testPlot(testResult)
 ```
 
@@ -259,7 +259,7 @@ are annotated to the right of each tissue.
 `networkPlot()` creates a bipartite network connecting genes to their
 associated tissues, coloured by signal category:
 
-```{r network, eval = FALSE}
+```{r network, eval = TRUE}
 networkPlot(result)
 ```
 
@@ -278,7 +278,7 @@ tissue associations.
 `goEnriched()` performs Gene Ontology enrichment analysis on genes
 showing tissue-specific expression in a tissue of interest:
 
-```{r go, eval = FALSE}
+```{r go, eval = TRUE}
 # biological process enrichment for liver-associated genes
 goResult <- goEnriched(
     result,
@@ -288,7 +288,7 @@ goResult <- goEnriched(
 )
 
 # view top enriched terms
-head(as.data.frame(goResult@result))
+head(as.data.frame(methods::slot(goResult, "result")))
 
 ```
 
@@ -300,7 +300,7 @@ The `type` argument accepts:
 
 # Complete example workflow
 
-```{r full_workflow, eval = FALSE}
+```{r full_workflow, eval = TRUE}
 library(Protein2Tissue)
 
 # --- inputs ---
@@ -350,7 +350,7 @@ from lists of differentially expressed genes (DEGs) derived from RNA‑seq data 
 differentially expressed proteins (DEPs) obtained from tissue‑specific 
 proteomics experiments.
 
-```{r full_workflow_tissue_specific, eval = FALSE}
+```{r full_workflow_tissue_specific, eval = TRUE}
 
 result2 <- tissueAnalysis2(
   input         = c("BRCA1", "EGFR", "ETDB", 

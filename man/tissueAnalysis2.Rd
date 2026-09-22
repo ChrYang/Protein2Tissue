@@ -66,7 +66,6 @@ If no proteins are found in the database, the function stops with
 an informative error message.
 }
 \examples{
-\donttest{
 # using gene symbols for input, Ensembl IDs for background
 result2 <- tissueAnalysis2(
   input          = c("BRCA1", "EGFR"),
@@ -79,7 +78,6 @@ result2 <- tissueAnalysis2(
 
 # access results
 result2
-}
 
 }
 \seealso{

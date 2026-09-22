@@ -22,7 +22,9 @@
 #'   Uhlen M et al. (2017). A pathology atlas of the human cancer
 #'   transcriptome. \emph{Science}, 357(6352).
 #'   \doi{10.1126/science.aan2507}
-#'
+#' @examples
+#' data(ee_tb)
+#' head(ee_tb)
 "ee_tb"
 
 
@@ -33,7 +35,9 @@
 #' of \code{geneClassification}. This data frame has two columns named
 #' \code{Tissue} and \code{Group}, defining predefined tissue groupings for
 #' group-enriched analysis. 
-#' 
+#' @examples
+#' data(tissue_map)
+#' head(tissue_map)
 "tissue_map"
 
 
@@ -68,4 +72,7 @@
 #' plasma_data
 #'
 #' @keywords datasets
+#' @examples
+#' data(plasma_data)
+#' head(plasma_data) 
 "plasma_data"

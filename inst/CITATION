@@ -1,2 +1,14 @@
+citHeader("To cite Protein2Tissue in publications, please use:")
+
 bibentry(
+  bibtype = "Manual",
+  title   = "Protein2Tissue: Tissue-specific protein expression analysis using the Human Protein Atlas",
+  author  = c(
+    person("Chaoran",  "Yang", role = c("aut", "cre"),
+           email = "chr.mt.yang@outlook.com"),
+    person("Yao", "Chen", role = "aut",
+           email = "emmachentar@live.com")
+  ),
+  year = "2026",
+  note = "R package version 0.99.3 Submitted to Bioconductor."
 )

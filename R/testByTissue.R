@@ -53,7 +53,6 @@
 #' specified in \code{padj}.
 #'
 #' @examples
-#' \donttest{
 #' result <- tissueAnalysis(
 #'     input      = c("TP53", "BRCA1", "EGFR"),
 #'     background = c("347", "948", "1050", "2167", "2819", "3625"),
@@ -72,7 +71,6 @@
 #'     padj          = "BH",
 #'     secretoryOnly = TRUE
 #' )
-#' }
 #'
 #' @seealso \code{\link{tissueAnalysis}}, \code{\link{heatmapEnrich}},
 #'   \code{\link[stats]{fisher.test}}, \code{\link[Exact]{exact.test}}, 

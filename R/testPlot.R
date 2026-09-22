@@ -22,7 +22,6 @@
 #' are rounded to 3 decimal places and displayed to the right of the bars.
 #'
 #' @examples
-#' \donttest{
 #' result <- tissueAnalysis(
 #'     input      = c("TP53", "BRCA1", "EGFR"),
 #'     background = c("347", "948", "1050", "2167", "2819", "3625"),
@@ -36,7 +35,6 @@
 #'
 #' # plot results
 #' testPlot(testResult)
-#' }
 #'
 #' @seealso \code{\link{testByTissue}}, \code{\link{tissueAnalysis}}
 #'

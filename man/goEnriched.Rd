@@ -35,7 +35,6 @@ tissue-specific or group-enriched expression patterns, using
 \code{\link[clusterProfiler]{enrichGO}}.
 }
 \examples{
-\donttest{
 data("plasma_data", package = "Protein2Tissue")
 tmp <- dplyr::filter(plasma_data, Coefficient.Age > 0 & q.Age < 0.05)
 tmp <- dplyr::pull(tmp, UniqueSymbol)
@@ -49,6 +48,5 @@ result <- tissueAnalysis(
    typeKeyBg  = "Gene",   # identifier type for background
 )
  goEnriched(result, type = "BP", tissueTest = "Liver", inclusion = "All")
-}
 
 }

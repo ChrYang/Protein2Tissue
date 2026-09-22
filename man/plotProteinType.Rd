@@ -24,7 +24,6 @@ input slot of the \code{Enrichment} object and plots the count of genes
 in each specificity class as a horizontal bar chart.
 }
 \examples{
-\donttest{
 result <- tissueAnalysis(
     input      = c("TP53", "BRCA1", "EGFR"),
     background = c("347", "948", "1050", "2167", "2819", "3625"),
@@ -32,7 +31,6 @@ result <- tissueAnalysis(
     typeKeyBg  = "EntrezID"
 )
 plotProteinType(result)
-}
 
 }
 \seealso{
